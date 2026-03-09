@@ -64,6 +64,7 @@ async def retrieval_node(state: AgentState) -> dict:
             search_text=query,
             vector_queries=[
                 {
+                    "kind": "vector",
                     "vector": query_vector,
                     "k_nearest_neighbors": TOP_K,
                     "fields": "content_vector",

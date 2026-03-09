@@ -68,7 +68,7 @@ async def decision_node(state: AgentState) -> dict:
         )
 
         # Persist to Cosmos DB
-        cosmos_client = get_cosmos_client()
+        cosmos_client = await get_cosmos_client()
         item = {
             "id": run_id,
             "partitionKey": run_id,
