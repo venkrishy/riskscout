@@ -1,0 +1,1 @@
+"""RiskScout LangGraph agent."""
