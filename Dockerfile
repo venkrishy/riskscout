@@ -8,10 +8,10 @@ WORKDIR /build
 
 RUN pip install uv
 
-COPY pyproject.toml .
+COPY pyproject.toml README.md ./
 COPY src/ src/
 
-RUN uv pip install --system --no-cache-dir -e .
+RUN uv pip install --system --no-cache-dir .
 
 # ---------------------------------------------------------------------------
 # Stage 2: Runtime — minimal production image
@@ -26,9 +26,6 @@ WORKDIR /app
 # Copy installed packages from builder
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Copy application source
-COPY src/ src/
 
 # Set ownership
 RUN chown -R appuser:appuser /app
