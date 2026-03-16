@@ -1,8 +1,16 @@
 # RiskScout
 
-Financial document intelligence agent built with LangGraph, deployed on Azure Container Apps.
+This is an AI Agentic solution written using LangGraph and deployed on Azure Container Apps.
+
+It is an Financial document intelligence agent
 
 Ingests loan applications, financial statements, and contracts — extracts entities, scores risk with GPT-4o, and routes to **approve / human review / reject** based on configurable policy thresholds. Implements human-in-the-loop review via LangGraph's interrupt/resume pattern.
+
+The frontend for this can be seen at [RiskScout (theaiguru.dev)](https://risk-scout.theaiguru.dev/).  Upload any financial statement or use some of the provided samples.  It will score the financial document for risk.  
+
+Watch the 7-node pipeline run live — status polls every 2 seconds.
+If the risk score lands 40–79, the graph pauses and you get a human-review form to approve or reject with a note.
+Final decision shows extracted entities, risk score, policy citations, and full audit trail.
 
 ---
 
@@ -341,4 +349,4 @@ riskscout/
 
 ---
 
-Built by [Venkat Krishnamurthy](https://theaiguru.dev)
+Built by [Venky Krishnaswamy](https://theaiguru.dev)
