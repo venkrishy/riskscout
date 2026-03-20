@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import time
 from io import BytesIO
-from uuid import uuid4
 
 import structlog
 from pypdf import PdfReader

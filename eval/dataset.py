@@ -342,7 +342,8 @@ DTI: 0.42
 Credit Score: 690
 Years in Business: 4
 
-Risk indicators: Cannabis industry regulatory risk — state-licensed but federal scheduling uncertainty.
+Risk indicators: Cannabis industry regulatory risk — state-licensed but federal scheduling
+uncertainty.
 Limited banking relationships due to industry. Cash-heavy operations.
 No prior defaults. License in good standing (Colorado MED).
 """,

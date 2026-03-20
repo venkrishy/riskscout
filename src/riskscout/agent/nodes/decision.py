@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import structlog
 
@@ -51,7 +51,7 @@ async def decision_node(state: AgentState) -> dict:
             {
                 "step": node_name,
                 "duration_ms": round(duration_ms, 1),
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(UTC).isoformat(),
             }
             for node_name, duration_ms in state.get("node_timings", {}).items()
         ]

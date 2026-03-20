@@ -40,9 +40,7 @@ async def ensure_indexes_exist() -> None:
 
     settings = get_settings()
     credential = AzureKeyCredential(settings.azure_search_api_key)
-    index_client = SearchIndexClient(
-        endpoint=settings.azure_search_endpoint, credential=credential
-    )
+    index_client = SearchIndexClient(endpoint=settings.azure_search_endpoint, credential=credential)
 
     for index_name in [settings.azure_search_index_name, settings.azure_search_policy_index_name]:
         fields = [
@@ -66,7 +64,9 @@ async def ensure_indexes_exist() -> None:
         ]
 
         vector_search = VectorSearch(
-            profiles=[VectorSearchProfile(name="hnsw-profile", algorithm_configuration_name="hnsw")],
+            profiles=[
+                VectorSearchProfile(name="hnsw-profile", algorithm_configuration_name="hnsw")
+            ],
             algorithms=[HnswAlgorithmConfiguration(name="hnsw")],
         )
 

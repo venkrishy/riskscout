@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from .runner import EvalReport
@@ -13,7 +13,7 @@ from .runner import EvalReport
 def to_dict(report: EvalReport) -> dict:
     """Convert report to JSON-serializable dict."""
     data = asdict(report)
-    data["generated_at"] = datetime.now(timezone.utc).isoformat()
+    data["generated_at"] = datetime.now(UTC).isoformat()
     return data
 
 
@@ -22,12 +22,12 @@ def to_markdown(report: EvalReport) -> str:
     lines = [
         "# RiskScout Evaluation Report",
         "",
-        f"**Generated**: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+        f"**Generated**: {datetime.now(UTC).strftime('%Y-%m-%d %H:%M UTC')}",
         "",
         "## Summary",
         "",
-        f"| Metric | Value |",
-        f"|--------|-------|",
+        "| Metric | Value |",
+        "|--------|-------|",
         f"| Total Documents | {report.total} |",
         f"| Correct Decisions | {report.correct} |",
         f"| Accuracy | {report.accuracy:.1%} |",
@@ -77,7 +77,7 @@ def save_report(report: EvalReport, output_dir: str = "eval/results") -> None:
     path = Path(output_dir)
     path.mkdir(parents=True, exist_ok=True)
 
-    ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
+    ts = datetime.now(UTC).strftime("%Y%m%d_%H%M%S")
 
     json_path = path / f"report_{ts}.json"
     json_path.write_text(json.dumps(to_dict(report), indent=2))

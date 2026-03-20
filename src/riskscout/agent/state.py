@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Annotated, Any
 from uuid import uuid4
 
@@ -11,13 +11,12 @@ from langgraph.graph.message import add_messages
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
 
-
 # ---------------------------------------------------------------------------
 # Enums
 # ---------------------------------------------------------------------------
 
 
-class RunStatus(str, Enum):
+class RunStatus(StrEnum):
     PENDING = "pending"
     INGESTING = "ingesting"
     EXTRACTING = "extracting"
@@ -31,7 +30,7 @@ class RunStatus(str, Enum):
     FAILED = "failed"
 
 
-class RoutingDecision(str, Enum):
+class RoutingDecision(StrEnum):
     APPROVE = "approve"
     REVIEW = "review"
     REJECT = "reject"
@@ -81,7 +80,7 @@ class HumanReviewInput(BaseModel):
     reviewer_id: str
     override_decision: RoutingDecision
     notes: str = ""
-    reviewed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    reviewed_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
 
 class FinalDecision(BaseModel):
@@ -94,7 +93,7 @@ class FinalDecision(BaseModel):
     entities: dict[str, Any]
     reasoning: str
     human_review: HumanReviewInput | None = None
-    decided_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    decided_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     audit_trail: list[dict[str, Any]] = Field(default_factory=list)
 
 

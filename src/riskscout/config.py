@@ -13,7 +13,9 @@ class Settings(BaseSettings):
     azure_openai_endpoint: str = Field(..., description="Azure OpenAI endpoint URL")
     azure_openai_api_key: str = Field(..., description="Azure OpenAI API key")
     azure_openai_api_version: str = Field(default="2024-02-01")
-    azure_openai_chat_deployment: str = Field(default="gpt-4o", description="Chat model deployment name")
+    azure_openai_chat_deployment: str = Field(
+        default="gpt-4o", description="Chat model deployment name"
+    )
     azure_openai_embedding_deployment: str = Field(
         default="text-embedding-3-large", description="Embedding model deployment name"
     )

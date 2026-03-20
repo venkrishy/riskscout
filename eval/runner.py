@@ -155,15 +155,11 @@ async def run_evaluation(concurrency: int = 3) -> EvalReport:
 
     # False positives: predicted approve when should be reject
     false_positive = sum(
-        1
-        for r in results
-        if r.actual_decision == "approve" and r.expected_decision == "reject"
+        1 for r in results if r.actual_decision == "approve" and r.expected_decision == "reject"
     )
     # False negatives: predicted reject when should be approve
     false_negative = sum(
-        1
-        for r in results
-        if r.actual_decision == "reject" and r.expected_decision == "approve"
+        1 for r in results if r.actual_decision == "reject" and r.expected_decision == "approve"
     )
 
     report = EvalReport(
@@ -191,6 +187,7 @@ async def run_evaluation(concurrency: int = 3) -> EvalReport:
 
 if __name__ == "__main__":
     from riskscout.infrastructure.observability import setup_telemetry
+
     from .report import print_report, save_report
 
     setup_telemetry()

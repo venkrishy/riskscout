@@ -2,9 +2,8 @@
 
 from __future__ import annotations
 
-import json
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import structlog
@@ -69,7 +68,7 @@ def emit_node_log(
         "input_tokens": input_tokens,
         "output_tokens": output_tokens,
         "total_tokens": input_tokens + output_tokens,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
     }
     if extra:
         record.update(extra)
