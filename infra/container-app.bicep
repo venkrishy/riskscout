@@ -83,7 +83,7 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
           name: 'riskscout'
           image: imageName
           resources: {
-            cpu: '1.0'
+            cpu: json('1.0')
             memory: '2Gi'
           }
           env: [

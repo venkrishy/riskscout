@@ -65,4 +65,5 @@ resource runsContainer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/conta
 
 output endpoint string = cosmosAccount.properties.documentEndpoint
 output accountName string = cosmosAccount.name
+@secure()
 output primaryKey string = cosmosAccount.listKeys().primaryMasterKey

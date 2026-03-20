@@ -4,6 +4,9 @@
 @description('Azure region for all resources')
 param location string = resourceGroup().location
 
+@description('Azure region for OpenAI (must have gpt-4o quota)')
+param openAiLocation string = 'eastus2'
+
 @description('Environment name (dev / staging / prod)')
 @allowed(['dev', 'staging', 'prod'])
 param environment string = 'dev'
@@ -50,7 +53,7 @@ module openai 'openai.bicep' = {
   name: 'openai'
   params: {
     prefix: prefix
-    location: location
+    location: openAiLocation
     tags: tags
   }
 }
