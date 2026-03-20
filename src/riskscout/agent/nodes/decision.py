@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from datetime import UTC, datetime
+from typing import Any
 
 import structlog
 
@@ -14,7 +15,7 @@ from riskscout.infrastructure.observability import emit_node_log
 logger = structlog.get_logger(__name__)
 
 
-async def decision_node(state: AgentState) -> dict:
+async def decision_node(state: AgentState) -> dict[str, Any]:
     """
     Assemble the final structured decision and persist it to Cosmos DB.
     Builds a full audit trail from node timings and intermediate outputs.

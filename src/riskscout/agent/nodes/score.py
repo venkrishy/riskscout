@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import time
+from typing import Any
 
 import structlog
 from langchain_openai import AzureChatOpenAI
-from pydantic import ValidationError
+from pydantic import SecretStr, ValidationError
 
 from riskscout.agent.state import AgentState, RiskScore, RunStatus
 from riskscout.config import get_settings
@@ -41,7 +42,7 @@ Be objective, cite specific numbers from the entities, and reference policy pass
 """
 
 
-async def score_node(state: AgentState) -> dict:
+async def score_node(state: AgentState) -> dict[str, Any]:
     """
     Call Azure OpenAI to produce a risk score based on entities and policy context.
     """
@@ -55,11 +56,11 @@ async def score_node(state: AgentState) -> dict:
     try:
         llm = AzureChatOpenAI(
             azure_endpoint=settings.azure_openai_endpoint,
-            api_key=settings.azure_openai_api_key,
+            api_key=SecretStr(settings.azure_openai_api_key),
             api_version=settings.azure_openai_api_version,
             azure_deployment=settings.azure_openai_chat_deployment,
             temperature=0,
-            max_tokens=1500,
+            model_kwargs={"max_tokens": 1500},
         )
 
         entities = state.get("extracted_entities") or {}
@@ -67,7 +68,7 @@ async def score_node(state: AgentState) -> dict:
         policy_passages = policy_ctx.get("passages", [])
 
         policy_text = (
-            "\n\n".join(f"[Policy {i+1}]: {p}" for i, p in enumerate(policy_passages[:3]))
+            "\n\n".join(f"[Policy {i + 1}]: {p}" for i, p in enumerate(policy_passages[:3]))
             if policy_passages
             else "No policy passages retrieved."
         )
@@ -93,6 +94,7 @@ Please score this document's risk level.
         input_tokens = usage.get("prompt_tokens", 0)
         output_tokens = usage.get("completion_tokens", 0)
 
+        assert isinstance(content, str), f"Unexpected LLM content type: {type(content)}"
         json_str = content.strip()
         if json_str.startswith("```"):
             json_str = json_str.split("```")[1]

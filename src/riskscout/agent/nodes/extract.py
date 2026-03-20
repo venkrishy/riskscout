@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import time
+from typing import Any
 
 import structlog
 from langchain_openai import AzureChatOpenAI
-from pydantic import ValidationError
+from pydantic import SecretStr, ValidationError
 
 from riskscout.agent.state import AgentState, ExtractedEntities, RunStatus
 from riskscout.config import get_settings
@@ -44,7 +45,7 @@ concentration risk, covenant violations, related-party transactions, etc.
 """
 
 
-async def extract_node(state: AgentState) -> dict:
+async def extract_node(state: AgentState) -> dict[str, Any]:
     """
     Call Azure OpenAI to extract structured financial entities from document text.
     Counts tokens and emits an observability log.
@@ -59,11 +60,11 @@ async def extract_node(state: AgentState) -> dict:
     try:
         llm = AzureChatOpenAI(
             azure_endpoint=settings.azure_openai_endpoint,
-            api_key=settings.azure_openai_api_key,
+            api_key=SecretStr(settings.azure_openai_api_key),
             api_version=settings.azure_openai_api_version,
             azure_deployment=settings.azure_openai_chat_deployment,
             temperature=0,
-            max_tokens=2000,
+            model_kwargs={"max_tokens": 2000},
         )
 
         # Truncate document text to avoid token overflow (~12k chars ~= 3k tokens)
@@ -84,6 +85,7 @@ async def extract_node(state: AgentState) -> dict:
         output_tokens = usage.get("completion_tokens", 0)
 
         # Parse JSON response
+        assert isinstance(content, str), f"Unexpected LLM content type: {type(content)}"
         json_str = content.strip()
         if json_str.startswith("```"):
             json_str = json_str.split("```")[1]

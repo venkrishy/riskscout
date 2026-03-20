@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import time
+from typing import Any
 
 import structlog
+from azure.search.documents.models import VectorizedQuery
 from langchain_openai import AzureOpenAIEmbeddings
+from pydantic import SecretStr
 
 from riskscout.agent.state import AgentState, PolicyContext, RunStatus
 from riskscout.config import get_settings
@@ -17,7 +20,7 @@ logger = structlog.get_logger(__name__)
 TOP_K = 5
 
 
-def _build_query_from_entities(entities: dict) -> str:
+def _build_query_from_entities(entities: dict[str, Any]) -> str:
     """Build a semantic search query from extracted entities."""
     parts = []
     if entities.get("loan_purpose"):
@@ -33,7 +36,7 @@ def _build_query_from_entities(entities: dict) -> str:
     return " ".join(parts)
 
 
-async def retrieval_node(state: AgentState) -> dict:
+async def retrieval_node(state: AgentState) -> dict[str, Any]:
     """
     Embed the entity-based query and retrieve relevant policy passages
     from Azure AI Search using vector + keyword hybrid search.
@@ -52,7 +55,7 @@ async def retrieval_node(state: AgentState) -> dict:
         # Generate query embedding
         embedder = AzureOpenAIEmbeddings(
             azure_endpoint=settings.azure_openai_endpoint,
-            api_key=settings.azure_openai_api_key,
+            api_key=SecretStr(settings.azure_openai_api_key),
             api_version=settings.azure_openai_api_version,
             azure_deployment=settings.azure_openai_embedding_deployment,
         )
@@ -63,12 +66,11 @@ async def retrieval_node(state: AgentState) -> dict:
         results = await search_client.search(
             search_text=query,
             vector_queries=[
-                {
-                    "kind": "vector",
-                    "vector": query_vector,
-                    "k_nearest_neighbors": TOP_K,
-                    "fields": "content_vector",
-                }
+                VectorizedQuery(
+                    vector=query_vector,
+                    k_nearest_neighbors=TOP_K,
+                    fields="content_vector",
+                )
             ],
             top=TOP_K,
             select=["id", "content", "source"],

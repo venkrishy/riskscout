@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from typing import Any
 
 import structlog
 
@@ -13,7 +14,7 @@ from riskscout.infrastructure.observability import emit_node_log
 logger = structlog.get_logger(__name__)
 
 
-async def route_node(state: AgentState) -> dict:
+async def route_node(state: AgentState) -> dict[str, Any]:
     """
     Apply configurable thresholds to the risk score and set routing_decision.
     This node is synchronous in logic; the actual conditional edge is wired in graph.py.

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import time
 from io import BytesIO
+from typing import Any
 
 import structlog
 from pypdf import PdfReader
@@ -37,7 +38,7 @@ def _chunk_text(text: str, chunk_size: int, overlap: int) -> list[str]:
     return chunks
 
 
-async def ingest_node(state: AgentState) -> dict:
+async def ingest_node(state: AgentState) -> dict[str, Any]:
     """
     Parse the uploaded document, chunk it, and index chunks in Azure AI Search.
     Emits a structured observability log on completion.

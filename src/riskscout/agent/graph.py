@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import END, START, StateGraph
 
@@ -15,7 +17,7 @@ from riskscout.agent.nodes.score import score_node
 from riskscout.agent.state import AgentState
 
 
-def build_graph() -> StateGraph:
+def build_graph() -> Any:
     """
     Construct and compile the RiskScout StateGraph.
 
@@ -69,10 +71,10 @@ def build_graph() -> StateGraph:
 
 
 # Singleton compiled graph
-_graph: StateGraph | None = None
+_graph: Any = None
 
 
-def get_graph() -> StateGraph:
+def get_graph() -> Any:
     global _graph
     if _graph is None:
         _graph = build_graph()

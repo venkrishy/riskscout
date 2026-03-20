@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import time
+from typing import Any
 
 import structlog
 from langgraph.types import interrupt
@@ -13,7 +14,7 @@ from riskscout.infrastructure.observability import emit_node_log
 logger = structlog.get_logger(__name__)
 
 
-async def human_review_node(state: AgentState) -> dict:
+async def human_review_node(state: AgentState) -> dict[str, Any]:
     """
     Pause graph execution using LangGraph's interrupt() mechanism.
     The graph is resumed by POSTing to /review/{run_id} with a HumanReviewInput payload.
@@ -30,7 +31,7 @@ async def human_review_node(state: AgentState) -> dict:
 
     # interrupt() suspends graph execution and returns this dict to the caller.
     # When resumed, `review_payload` contains the human reviewer's response.
-    review_payload: dict = interrupt(
+    review_payload: dict[str, Any] = interrupt(
         {
             "message": "Human review required. Submit decision via POST /review/{run_id}.",
             "run_id": run_id,
