@@ -5,6 +5,9 @@ param location string
 param tags object
 param containerRegistryServer string
 param imageTag string
+param acrUsername string
+@secure()
+param acrPassword string
 param logAnalyticsWorkspaceId string
 param appInsightsConnectionString string
 param azureOpenAiEndpoint string
@@ -54,10 +57,12 @@ resource containerApp 'Microsoft.App/containerApps@2024-03-01' = {
       registries: [
         {
           server: containerRegistryServer
-          identity: 'system'
+          username: acrUsername
+          passwordSecretRef: 'acr-password'
         }
       ]
       secrets: [
+        { name: 'acr-password', value: acrPassword }
         { name: 'azure-openai-key', value: azureOpenAiApiKey }
         { name: 'azure-search-key', value: azureSearchApiKey }
         { name: 'cosmos-key', value: cosmosKey }

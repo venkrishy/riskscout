@@ -14,6 +14,13 @@ param environment string = 'dev'
 @description('Azure Container Registry login server')
 param containerRegistryServer string
 
+@description('Azure Container Registry admin username')
+param acrUsername string
+
+@secure()
+@description('Azure Container Registry admin password')
+param acrPassword string
+
 @description('Container image tag to deploy')
 param imageTag string = 'latest'
 
@@ -95,6 +102,8 @@ module containerApp 'container-app.bicep' = {
     location: location
     tags: tags
     containerRegistryServer: containerRegistryServer
+    acrUsername: acrUsername
+    acrPassword: acrPassword
     imageTag: imageTag
     logAnalyticsWorkspaceId: monitoring.outputs.logAnalyticsWorkspaceId
     appInsightsConnectionString: monitoring.outputs.appInsightsConnectionString

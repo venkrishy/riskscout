@@ -116,6 +116,8 @@ jobs:
           parameters: >
             environment=prod
             containerRegistryServer=${{ secrets.AZURE_CONTAINER_REGISTRY }}
+            acrUsername=${{ secrets.ACR_USERNAME }}
+            acrPassword=${{ secrets.ACR_PASSWORD }}
             imageTag=${{ needs.build.outputs.image_tag }}
             azureOpenAiApiKey=${{ secrets.AZURE_OPENAI_API_KEY }}
             azureSearchApiKey=${{ secrets.AZURE_SEARCH_API_KEY }}
@@ -127,4 +129,4 @@ jobs:
           acrName: ${{ secrets.ACR_NAME }}
           containerAppName: riskscout-prod-app
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
-          imageToBuild: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
+          imageToDeploy: ${{ secrets.AZURE_CONTAINER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.image_tag }}
